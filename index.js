@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const amqplib = require('amqplib')
 const admin = require('firebase-admin');
-var serviceAccount = require("../key.json");
+var serviceAccount = require("./key.json");
 
 const app = express();
 app.use(cors());
@@ -21,7 +21,7 @@ var connection = null;
 var channel = null;
 
 async function sendMessage(licenseplate) {
-    connection = await amqplib.connect('amqp://rabbitmq:rabbitmq@localhost');
+    connection = await amqplib.connect('amqp://rabbitmq:rabbitmq@rabbitmq');
     channel = await connection.createChannel();
 
     const queue = 'rpc_queuesds';
