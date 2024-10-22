@@ -21,7 +21,7 @@ var connection = null;
 var channel = null;
 
 async function sendMessage(licenseplate) {
-    connection = await amqplib.connect('amqp://rabbitmq:rabbitmq@rabbitmq');
+    connection = await amqplib.connect('amqp://rabbitmq:rabbitmq@localhost');
     channel = await connection.createChannel();
 
     const queue = 'rpc_queuesds';
@@ -107,7 +107,38 @@ app.post('/create', async (req, res) => {
     }
 });
 
+app.put('/update/:id', async (req, res) => {
+    try {
+        // Retrieve the ID from the request parameters
+        const id = req.params.id;
+        // Retrieve the updated data from the request body
+        const updatedData = req.body;
+
+        // Get a reference to the document to be updated
+        const docRef = admin.firestore().collection('carInfo').doc(id);
+
+        // Update the document
+        await docRef.update(updatedData);
+
+        res.status(200).json({ message: 'Document updated successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+});
+
+app.delete('/delete/:id', async (req, res) => {
+    try {
+        const docRef = db.collection('carInfo').doc(req.params.id);
+        await docRef.delete();
+
+        res.status(200).json({ message: 'Document deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+})
+
 const db = admin.firestore();
+
 app.listen(port, async () => {
     console.log(`Server is running on PORT ${port}`);
     console.log(" [x] Sending Ping")
