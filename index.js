@@ -21,10 +21,10 @@ var connection = null;
 var channel = null;
 
 async function sendMessage(licenseplate) {
-    connection = await amqplib.connect('amqp://rabbitmq:rabbitmq@rabbitmq');
+    connection = await amqplib.connect('amqp://rabbitmq:rabbitmq@localhost');
     channel = await connection.createChannel();
 
-    const queue = 'rpc_queuesds';
+    const queue = 'carQueue';
 
     await channel.assertQueue(queue, {
         durable: false
@@ -53,6 +53,45 @@ async function sendMessage(licenseplate) {
     });
 }
 
+async function messageConsumer() {
+    connection = await amqplib.connect('amqp://rabbitmq:rabbitmq@localhost')
+    channel = await connection.createChannel()
+
+    var queue = 'carQueue';
+
+    channel.assertQueue(queue, {
+        durable: false
+    });
+    channel.prefetch(1);
+    console.log(' [x] Awaiting RPC requests');
+    channel.consume(queue, async function reply(msg) {
+
+        console.log(`received: ${msg.content.toString()}`);
+
+        const carRef = db.collection('carInfo').doc(msg.content.toString());
+        const carData = await carRef.get();
+
+        // Check if document exists
+        if (!carData.exists) {
+            responseMessage = { error: 'Car not found' };
+        } else {
+            responseMessage = carData.data();
+        }
+
+        await channel.sendToQueue(msg.properties.replyTo,
+            Buffer.from(JSON.stringify(responseMessage)), {
+            correlationId: msg.properties.correlationId
+        });
+        
+        console.log(`Sent: ${JSON.stringify(responseMessage)}`);
+
+        channel.ack(msg);
+    });
+
+
+}
+
+
 // API
 // /read/all
 app.get('/carinfo', async (req, res) => {
@@ -72,9 +111,10 @@ app.get('/carinfo', async (req, res) => {
 
 app.get('/carinfo/:id', async (req, res) => {
     try {
-        const responseMessage = await sendMessage(req.params.id);
+        // const responseMessage = await sendMessage(req.params.id);
+
         //gets something, using the received message
-        const carRef = db.collection('carInfo').doc(responseMessage);
+        const carRef = db.collection('carInfo').doc(req.params.id);
         const carData = await carRef.get();
 
         // You can now use responseMessage here
@@ -139,11 +179,12 @@ app.delete('/carinfo/delete/:id', async (req, res) => {
 })
 
 const db = admin.firestore();
+messageConsumer()
 
 app.listen(port, async () => {
     console.log(`Server is running on PORT ${port}`);
-    console.log(" [x] Sending Ping")
-    await sendMessage('ping');
-    console.log('----')
+    // console.log(" [x] Sending Ping")
+    // await sendMessage('ping');
+    // console.log('----')
 });
 
