@@ -21,7 +21,7 @@ var connection = null;
 var channel = null;
 
 async function sendMessage(licenseplate) {
-    connection = await amqplib.connect('amqp://rabbitmq:rabbitmq@localhost');
+    connection = await amqplib.connect('amqp://rabbitmq:rabbitmq@rabbitmq');
     channel = await connection.createChannel();
 
     const queue = 'rpc_queuesds';
@@ -54,7 +54,8 @@ async function sendMessage(licenseplate) {
 }
 
 // API
-app.get('/read/all', async (req, res) => {
+// /read/all
+app.get('/carinfo', async (req, res) => {
     try {
         const carRef = db.collection('carInfo');
         const response = await carRef.get();
@@ -69,7 +70,7 @@ app.get('/read/all', async (req, res) => {
     }
 })
 
-app.get('/read/:id', async (req, res) => {
+app.get('/carinfo/:id', async (req, res) => {
     try {
         const responseMessage = await sendMessage(req.params.id);
         //gets something, using the received message
@@ -87,7 +88,7 @@ app.get('/read/:id', async (req, res) => {
     }
 })
 
-app.post('/create', async (req, res) => {
+app.post('/carinfo/create', async (req, res) => {
     try {
         const { brand, model, year, licenseplate } = req.body;
         const carJson = {
@@ -107,7 +108,7 @@ app.post('/create', async (req, res) => {
     }
 });
 
-app.put('/update/:id', async (req, res) => {
+app.put('/carinfo/update/:id', async (req, res) => {
     try {
         // Retrieve the ID from the request parameters
         const id = req.params.id;
@@ -126,7 +127,7 @@ app.put('/update/:id', async (req, res) => {
     }
 });
 
-app.delete('/delete/:id', async (req, res) => {
+app.delete('/carinfo/delete/:id', async (req, res) => {
     try {
         const docRef = db.collection('carInfo').doc(req.params.id);
         await docRef.delete();
