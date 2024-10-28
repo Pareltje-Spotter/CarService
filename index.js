@@ -87,13 +87,9 @@ async function messageConsumer() {
 
         channel.ack(msg);
     });
-
-
 }
 
-
 // API
-// /read/all
 app.get('/carinfo', async (req, res) => {
     try {
         const carRef = db.collection('carInfo');
@@ -118,11 +114,11 @@ app.get('/carinfo/:id', async (req, res) => {
         const carData = await carRef.get();
 
         // You can now use responseMessage here
-        const combinedResponse = {
-            carData: carData.data(),
-            dataFromOtherSource: responseMessage
-        };
-        res.send(combinedResponse);
+        // const combinedResponse = {
+        //     carData: carData.data(),
+        //     dataFromOtherSource: responseMessage
+        // };
+        res.send(carData.data());
     } catch (error) {
         res.send(error);
     }
