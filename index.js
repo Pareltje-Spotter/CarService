@@ -33,7 +33,7 @@ async function messageConsumer() {
     });
     
     channel.prefetch(1);
-    console.log(' [x] Awaiting RPC requests');
+    // console.log(' [x] Awaiting RPC requests');
     channel.consume(queue, async function reply(msg) {
 
         console.log(`received: ${msg.content.toString()}`);
@@ -64,3 +64,4 @@ app.listen(port, () => {
     console.log(`Server is running on PORT ${port}`);
 });
 
+module.exports = app;
