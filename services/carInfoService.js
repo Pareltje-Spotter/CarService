@@ -1,43 +1,64 @@
-// services/carInfoService.js
 const CarInfo = require('../models/carInfo');  // If using models
 const db = require('../config/db.config');
 
+const MongoClient = require('mongodb').MongoClient;
+const ObjectID = require('mongodb').ObjectId;
+
+// Place in db config
+const uri = "mongodb://mongoadmin:mongoadmin@localhost:27017";
+const client = new MongoClient(uri,);
+
+async function connectToMongoDB() {
+  //export
+  try {
+    await client.connect();
+    // console.log('Connected to MongoDB successfully!');
+    return client.db('carInfo');
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error);
+    throw error;
+  }
+}
+
 exports.getAllCars = async () => {
-  const response = await db.collection('carInfo').get();
-  let responseArr = [];
- 
-  response.forEach(doc => {
-    console.log(doc.data())
-    responseArr.push(doc.data());
-  });
-  return responseArr;
+  const db = await connectToMongoDB();
+  const collection = db.collection('info');
+  const response = await collection.find().toArray();
+  return response;
 };
 
 exports.getCarById = async (id) => {
-  const carRef = db.collection('carInfo').doc(id);
-  const carData = await carRef.get();
-  return carData.data();
+  const db = await connectToMongoDB();
+  const collection = db.collection('info');
+  const response = await collection.findOne({ _id: new ObjectID(id) });
+  return response;
 };
 
+// For message bus, but we can save by id now I think
 exports.getCarByLicense = async (id) => {
-    const carRef = db.collection('carInfo').doc(id);
-    const carData = await carRef.get();
-    return carData.data();
-  };
+  const db = await connectToMongoDB();
+  const collection = db.collection('info');
+  const response = await collection.findOne({ license: id });
+  return response;
+};
 
 exports.createCar = async (carInfo) => {
-  const docRef = await db.collection('carInfo').doc(carInfo.licenseplate).set(carInfo);
-  return { message: 'carInfo created successfully', id: docRef.id };
+  const db = await connectToMongoDB();
+  const collection = db.collection('info')
+  const result = await collection.insertOne(carInfo);
+  return { message: 'Document created successfully', data: result.insertedId };
 };
 
 exports.updateCar = async (id, updatedData) => {
-  const docRef = db.collection('carInfo').doc(id);
-  await docRef.update(updatedData);
+  const db = await connectToMongoDB();
+  const collection = db.collection('info')
+  const result = await collection.updateOne({ _id: new ObjectID(id) }, { $set: updatedData });
   return { message: 'Document updated successfully' };
 };
 
 exports.deleteCar = async (id) => {
-  const docRef = db.collection('carInfo').doc(id);
-  await docRef.delete();
-  return { message: 'Document deleted successfully' };
+  const db = await connectToMongoDB();
+  const collection = db.collection('info')
+  const result = await collection.deleteOne({ _id: new ObjectID(id) });
+  return { message: 'Document updated successfully' };
 };

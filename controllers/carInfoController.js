@@ -23,9 +23,12 @@ exports.getCarById = async (req, res) => {
     }
 };
 
+// For message bus, but we can save by id now I think
 exports.getCarByLicense = async (license) => {
     try {
-        const car = await carInfoService.getCarByLicense(license);
+        // used to be the same, but changes with mongo
+        // const car = await carInfoService.getCarById(id);
+        const car = await carInfoService.getCarById(license);
         if (!car) {
             return res.status(404).json({ error: 'Car not found' });
         }
@@ -37,8 +40,7 @@ exports.getCarByLicense = async (license) => {
 
 exports.createCar = async (req, res) => {
     try {
-        const { brand, model, year, licenseplate } = req.body;
-
+        const { brand, model, year, license } = req.body;
         const newCar = await carInfoService.createCar(req.body);
         res.status(201).json(newCar);
     } catch (error) {
@@ -49,7 +51,7 @@ exports.createCar = async (req, res) => {
 exports.updateCar = async (req, res) => {
     try {
         const id = req.params.id;
-        const { brand, model, year, licenseplate } = req.body;
+        const { brand, model, year, license } = req.body;
         const updatedCar = await carInfoService.updateCar(id, req.body);
         res.status(200).json(updatedCar);
     } catch (error) {
@@ -61,7 +63,6 @@ exports.deleteCar = async (req, res) => {
     try {
         const id = req.params.id;
         const deletedCar = await carInfoService.deleteCar(id);
-        // res.status(204).send(); // No content
         res.status(200).json(deletedCar);
     } catch (error) {
         res.status(500).json({ error: 'Failed to delete car' });
