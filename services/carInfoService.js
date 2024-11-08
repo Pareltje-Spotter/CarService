@@ -5,7 +5,7 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectId;
 
 // Place in db config
-const uri = "mongodb://mongoadmin:mongoadmin@carService-DB:27018";
+const uri = "mongodb://mongoadmin:mongoadmin@mongo:27018";
 const client = new MongoClient(uri,);
 
 async function connectToMongoDB() {
