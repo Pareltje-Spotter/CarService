@@ -1,6 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 
-const uri = "mongodb://mongoadmin:mongoadmin@mongodb:27017";
+const uri = "mongodb://@mongo:27017";
 const client = new MongoClient(uri,);
 
 async function seedDatabase() {
