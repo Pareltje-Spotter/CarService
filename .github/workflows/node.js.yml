@@ -20,8 +20,11 @@ jobs:
           - 15672:15672
       mongo:
         image: mongo:latest
+        options: > 
+          --entrypoint mongod  
+          --port 27018        
         ports:
-          - 27017:27018
+          - 27018:27018
 
     steps:
     - uses: actions/checkout@v4
