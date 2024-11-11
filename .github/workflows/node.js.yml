@@ -24,6 +24,13 @@ jobs:
       with:
         ports: '5672:5672 15672:15672'
         container-name: "rabbitmq"
+        
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.11.0
+      with:
+        mongodb-version: ${{ matrix.mongodb-version }}
+        mongodb-port: 27018
+        
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
