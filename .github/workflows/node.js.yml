@@ -21,8 +21,7 @@ jobs:
       mongo:
         image: mongo:latest
         options: > 
-          --entrypoint mongod  
-          --port 27018        
+          --entrypoint mongod --port 27018        
         ports:
           - 27018:27018
 
