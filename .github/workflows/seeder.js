@@ -1,7 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 
-const uri = "mongodb://mongoadmin:mongoadmin@mongo:27017/streamhatchet?directConnection=true";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const uri = "mongodb://mongoadmin:mongoadmin@mongodb:27017";
+const client = new MongoClient(uri,);
 
 async function seedDatabase() {
   try {
