@@ -30,6 +30,8 @@ jobs:
       with:
         mongodb-version: ${{ matrix.mongodb-version }}
         mongodb-port: 27018
+        mongodb-root-username: mongoadmin  # Replace with your desired username
+        mongodb-root-password: ${{ secrets.MONGO_ROOT_PASSWORD }}  # Reference a secret
         
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
