@@ -12,26 +12,23 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    services:
+      rabbitmq:
+        image: rabbitmq:3-management
+        ports:
+          - 5672:5672
+          - 15672:15672
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27018:27018
 
     steps:
     - uses: actions/checkout@v4
-    - name: Start RabbitMQ
-      uses: namoshek/rabbitmq-github-action@v1
-      with:
-        ports: '5672:5672 15672:15672'
-        container-name: "rabbitmq"
-        
-    - name: Start MongoDB
-      uses: supercharge/mongodb-github-action@1.11.0
-      with:
-        mongodb-version: 6.1
-        mongodb-port: 27018
-        mongodb-root-username: mongoadmin  # Replace with your desired username
-        mongodb-root-password: ${{ secrets.MONGO_ROOT_PASSWORD }}  # Reference a secret
+
+    - name: Set up Docker Compose
+      run: |
+        docker-compose up -d
         
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
