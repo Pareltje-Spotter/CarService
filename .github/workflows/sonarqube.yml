@@ -1,4 +1,4 @@
-name: Build
+name: Code Quality Scan
 on:
   push:
   pull_request:
