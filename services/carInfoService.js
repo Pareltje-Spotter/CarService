@@ -39,7 +39,7 @@ exports.getCarById = async (id) => {
 exports.getCarByLicense = async (id) => {
   const db = await connectToMongoDB();
   const collection = db.collection('info');
-  const response = await collection.findOne({ license: id });
+  const response = await collection.findOne({ licenseplate: id });
   return response;
 };
 
