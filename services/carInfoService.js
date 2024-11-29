@@ -4,7 +4,7 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectId;
 
 // Place in db config
-const uri = `mongodb://mongoadmin:mongoadmin@${process.env.MY_ENV_VAR || "localhost"}:27017`;
+const uri = `mongodb://mongoadmin:mongoadmin@${process.env.MONGO_ENV_NAME || "localhost"}:27017`;
 // const uri = "mongodb://mongoadmin:mongoadmin@localhost:27017";
 const client = new MongoClient(uri,);
 
