@@ -35,7 +35,6 @@ exports.getCarById = async (id) => {
   return response;
 };
 
-// For message bus, but we can save by id now I think
 exports.getCarByLicense = async (id) => {
   const db = await connectToMongoDB();
   const collection = db.collection('info');
