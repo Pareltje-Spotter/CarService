@@ -47,11 +47,11 @@ describe('Car Info API Integration Tests', () => {
     ]);
   });
 
-  // afterEach(async () => {
-  //   // Clean up the database
-  //   const collection = db.collection('info');
-  //   await collection.deleteMany({});
-  // });
+  afterEach(async () => {
+    // Clean up the database
+    const collection = db.collection('info');
+    await collection.deleteMany({});
+  });
 
   test('GET /carinfo should return all cars', async () => {
     const response = await request(app).get('/carinfo');
