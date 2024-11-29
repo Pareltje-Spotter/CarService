@@ -15,6 +15,7 @@ const router = express.Router();
 app.use('/carinfo', router);
 router.get('/', carInfoController.getCars);
 router.get('/:id', carInfoController.getCarById);
+router.get('/license/:license', carInfoController.getCarByLicensePlate);
 router.post('/create', carInfoController.createCar);
 router.put('/update/:id', carInfoController.updateCar);
 router.delete('/delete/:id', carInfoController.deleteCar);

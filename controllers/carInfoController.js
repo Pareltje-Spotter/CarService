@@ -23,6 +23,20 @@ exports.getCarById = async (req, res) => {
     }
 };
 
+exports.getCarByLicensePlate = async (req, res) => {
+    try {
+        const id = req.params.license;
+
+        const car = await carInfoService.getCarByLicense(id);
+        if (!car) {
+            return res.status(404).json({ error: 'Car not found' });
+        }
+        res.status(200).json(car);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to retrieve car' });
+    }
+};
+
 // For message bus, but we can save by id now I think
 exports.getCarByIdForMarker = async (carId) => {
     try {
