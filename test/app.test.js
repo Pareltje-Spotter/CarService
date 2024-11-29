@@ -16,7 +16,6 @@
 //   // ... other tests for different endpoints and scenarios
 // });
 
-// Integration Test Example
 
 const request = require('supertest');
 const app = require('../index'); // Path to your Express app
@@ -25,7 +24,6 @@ const { MongoClient } = require('mongodb');
 let connection;
 let db;
 let server;
-
 
 beforeAll(async () => {
   // Start the server
@@ -46,6 +44,7 @@ afterAll(async () => {
 
 });
 
+// Integration Test 
 describe('Car Info API Integration Tests', () => {
   beforeEach(async () => {
     // Set up initial test data
@@ -81,3 +80,42 @@ describe('Car Info API Integration Tests', () => {
     expect(response.body.message).toBe('Document created successfully');
   });
 });
+
+// End-to-End Test Example
+// DEBUG FIRST
+// describe('E2E Tests for Car Info API', () => {
+//   test('Full flow of creating, retrieving, updating, and deleting a car', async () => {
+//     // Step 1: Create a new car
+//     const carData = { brand: 'Tesla', model: 'Model S', year: 2022, licenseplate: 'EV123' };
+//     const createResponse = await request(app).post('/carinfo/create').send(carData);
+//     expect(createResponse.status).toBe(201);
+//     const createdCarId = createResponse.body.data;
+
+//     // Step 2: Retrieve the car
+//     const getResponse = await request(app).get(`/carinfo/${createdCarId}`);
+//     expect(getResponse.status).toBe(200);
+//     expect(getResponse.body.model).toBe('Model S');
+
+//     // Step 3: Update the car
+//     const updatedData = { brand: 'Tesla', model: 'Model 3', year: 2023 };
+//     const updateResponse = await request(app).put(`/carinfo/update/${createdCarId}`).send(updatedData);
+//     expect(updateResponse.status).toBe(200);
+
+//     // Step 4: Delete the car
+//     const deleteResponse = await request(app).delete(`/carinfo/delete/${createdCarId}`);
+//     expect(deleteResponse.status).toBe(200);
+//     expect(deleteResponse.body.message).toBe('Document updated successfully');
+//   });
+// });
+
+
+// Health Check Test Example
+
+// test('MongoDB connection health check', async () => {
+//   const db = await MongoClient.connect("mongodb://mongoadmin:mongoadmin@mongo:27017", {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   });
+//   expect(db.isConnected()).toBe(true);
+//   db.close();
+// });

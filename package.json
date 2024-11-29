@@ -4,8 +4,7 @@
   "main": "carService.js",
   "scripts": {
     "start": "node index.js",
-    "test": "jest --forceExit",
-    "seed-db": "node ./.github/workflows/seeder.js"
+    "test": "jest --forceExit"
   },
   "author": "",
   "license": "ISC",
