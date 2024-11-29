@@ -25,7 +25,7 @@ const port = 5001;
 
 async function messageConsumer() {
     // connection = await amqplib.connect('amqp://rabbitmq:rabbitmq@localhost')
-    connection = await amqplib.connect(`amqp://rabbitmq:rabbitmq@${process.env.mongoInstance || "rabbitmq"}`)
+    connection = await amqplib.connect(`amqp://rabbitmq:rabbitmq@${process.env.mongoInstance || "localhost"}`)
     channel = await connection.createChannel()
 
     var queue = 'carQueue';
