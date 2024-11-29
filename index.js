@@ -25,7 +25,7 @@ const port = 5001;
 
 async function messageConsumer() {
     // connection = await amqplib.connect('amqp://rabbitmq:rabbitmq@localhost')
-    connection = await amqplib.connect(`amqp://rabbitmq:rabbitmq@${process.env.mongoInstance || "localhost"}`)
+    connection = await amqplib.connect('amqp://rabbitmq:rabbitmq@rabbitmq')
     channel = await connection.createChannel()
 
     var queue = 'carQueue';
@@ -60,7 +60,7 @@ async function messageConsumer() {
         channel.ack(msg);
     });
 }
-messageConsumer();
+// messageConsumer();
 
 app.listen(port, () => {
     console.log(`Server is running on PORT ${port}`);
