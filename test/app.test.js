@@ -24,8 +24,14 @@ const { MongoClient } = require('mongodb');
 
 let connection;
 let db;
+let server;
+
 
 beforeAll(async () => {
+  // Start the server
+  server = app.listen(3000);
+
+  // Connect to MongoDB
   connection = await MongoClient.connect(`mongodb://mongoadmin:mongoadmin@${process.env.mongoInstance || "localhost"}:27017`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -34,7 +40,10 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  // Close MongoDB connection
   await connection.close();
+  await new Promise(resolve => server.close(resolve));
+
 });
 
 describe('Car Info API Integration Tests', () => {

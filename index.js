@@ -33,7 +33,7 @@ async function messageConsumer() {
     channel.assertQueue(queue, {
         durable: false
     });
-    
+
     channel.prefetch(1);
     // console.log(' [x] Awaiting RPC requests');
     channel.consume(queue, async function reply(msg) {
@@ -60,10 +60,12 @@ async function messageConsumer() {
         channel.ack(msg);
     });
 }
-// messageConsumer();
+if (require.main === module) {
+    messageConsumer();
 
-app.listen(port, () => {
-    console.log(`Server is running on PORT ${port}`);
-});
+    app.listen(port, () => {
+        console.log(`Server is running on PORT ${port}`);
+    });
+}
 
 module.exports = app;
