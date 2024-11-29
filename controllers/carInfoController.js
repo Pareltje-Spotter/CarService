@@ -24,11 +24,11 @@ exports.getCarById = async (req, res) => {
 };
 
 // For message bus, but we can save by id now I think
-exports.getCarByLicense = async (license) => {
+exports.getCarByIdForMarker = async (carId) => {
     try {
         // used to be the same, but changes with mongo
         // const car = await carInfoService.getCarById(id);
-        const car = await carInfoService.getCarById(license);
+        const car = await carInfoService.getCarById(carId);
         if (!car) {
             return res.status(404).json({ error: 'Car not found' });
         }

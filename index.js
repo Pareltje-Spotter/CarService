@@ -23,6 +23,7 @@ router.delete('/delete/:id', carInfoController.deleteCar);
 const port = 5001;
 
 async function messageConsumer() {
+    // connection = await amqplib.connect('amqp://rabbitmq:rabbitmq@localhost')
     connection = await amqplib.connect('amqp://rabbitmq:rabbitmq@rabbitmq')
     channel = await connection.createChannel()
 
@@ -38,7 +39,7 @@ async function messageConsumer() {
 
         console.log(`received: ${msg.content.toString()}`);
 
-        const carData = await carInfoController.getCarByLicense(msg.content.toString());
+        const carData = await carInfoController.getCarByIdForMarker(msg.content.toString());
         console.log(carData)
 
         // Check if document exists
