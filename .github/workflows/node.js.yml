@@ -9,7 +9,8 @@ on:
 
 jobs:
   build:
-
+    env:
+      MY_ENV_VAR: localhost
     runs-on: ubuntu-latest
 
     services:

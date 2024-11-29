@@ -26,7 +26,7 @@ let connection;
 let db;
 
 beforeAll(async () => {
-  connection = await MongoClient.connect("mongodb://mongoadmin:mongoadmin@localhost:27017", {
+  connection = await MongoClient.connect(`mongodb://mongoadmin:mongoadmin@${process.env.mongoInstance || "localhost"}:27017`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
