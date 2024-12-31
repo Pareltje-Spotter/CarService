@@ -25,7 +25,7 @@ jobs:
           target: 'http://pareltje-car:8080/'
           extra_docker_args: '--network=zap-net'
           token: ${{ secrets.GITHUB_TOKEN }}
-          debug: true** 
+          debug: true
 
       - name: Stop Application
         run: |
