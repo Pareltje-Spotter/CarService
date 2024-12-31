@@ -61,7 +61,7 @@ async function messageConsumer() {
     });
 }
 if (require.main === module) {
-    // messageConsumer();
+    messageConsumer();
 
     app.listen(port, () => {
         console.log(`Server is running on PORT ${port}`);
