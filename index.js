@@ -2,8 +2,11 @@ const express = require('express');
 const carInfoController = require('./controllers/carInfoController');
 const cors = require('cors')
 const amqplib = require('amqplib')
+const oasGenerator = require('express-oas-generator');
 
 const app = express();
+oasGenerator.init(app, {});
+
 app.use(cors());
 
 app.use(express.json());
@@ -19,6 +22,12 @@ router.get('/license/:license', carInfoController.getCarByLicensePlate);
 router.post('/create', carInfoController.createCar);
 router.put('/update/:id', carInfoController.updateCar);
 router.delete('/delete/:id', carInfoController.deleteCar);
+
+const users = [{ id: 1, name: "John" }, { id: 2, name: "Brian" }]
+
+app.get('/users', async (req, res) => {
+    return res.send(users)
+})
 
 // ... error handling middleware
 const port = 5001;
@@ -61,7 +70,7 @@ async function messageConsumer() {
     });
 }
 if (require.main === module) {
-    messageConsumer();
+    // messageConsumer();
 
     app.listen(port, () => {
         console.log(`Server is running on PORT ${port}`);
