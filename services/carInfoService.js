@@ -39,6 +39,7 @@ exports.getCarByLicense = async (id) => {
   const db = await connectToMongoDB();
   const collection = db.collection('info');
   const response = await collection.findOne({ licenseplate: id });
+  client.close();
   return response;
 };
 
