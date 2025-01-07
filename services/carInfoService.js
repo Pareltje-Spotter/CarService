@@ -47,6 +47,7 @@ exports.createCar = async (carInfo) => {
   const db = await connectToMongoDB();
   const collection = db.collection('info')
   const result = await collection.insertOne(carInfo);
+  client.close();
   return { message: 'Document created successfully', data: result.insertedId };
 };
 
