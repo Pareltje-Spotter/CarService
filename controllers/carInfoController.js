@@ -32,8 +32,9 @@ exports.getCarByLicensePlate = async (req, res) => {
         if (car) {
             return res.status(200).json(car); // Response sent here
         }
-        const response2 = await axios.get(`https://cloud-function.azurewebsites.net/api/rdw-call?car=TH926F`);
+        // const response2 = await axios.get(`https://cloud-function.azurewebsites.net/api/rdw-call?car=TH926F`);
         try {
+            console.log(id);
             const response = await axios.get(`https://cloud-function.azurewebsites.net/api/rdw-call?car=${id}`);
             if (response.data != null) {
                 const newCar = await carInfoService.getCarByLicense(id);
