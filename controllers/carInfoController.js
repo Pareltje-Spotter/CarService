@@ -1,4 +1,5 @@
 const carInfoService = require('../services/carInfoService');
+const axios = require('axios');
 
 exports.getCars = async (req, res) => {
     try {
@@ -28,12 +29,31 @@ exports.getCarByLicensePlate = async (req, res) => {
         const id = req.params.license;
 
         const car = await carInfoService.getCarByLicense(id);
-        if (!car) {
-            return res.status(404).json({ error: 'Car not found' });
+        if (car) {
+            return res.status(200).json(car); // Response sent here
         }
-        res.status(200).json(car);
+
+        try {
+            const response = await axios.get(`https://cloud-function.azurewebsites.net/api/rdw-call?car=${id}`);
+            if (response.data != null) {
+                const newCar = await carInfoService.getCarByLicense(id);
+                return res.status(200).json(newCar); // Response sent here
+            }
+        } catch (error) {
+            if (error.response) {
+                console.error('Error Response:', error.response.data);
+            } else if (error.request) {
+                console.error('Error Request:', error.request);
+            } else {
+                console.error('Error Message:', error.message);
+            }
+        }
+
+        // Send a 404 response only if no car is found and no response is received
+        return res.status(404).json({ error: 'Car not found' });
+
     } catch (error) {
-        res.status(500).json({ error: 'Failed to retrieve car' });
+        res.status(500).json({ error: 'Failed to retrieve car' }); // Final fallback response
     }
 };
 
